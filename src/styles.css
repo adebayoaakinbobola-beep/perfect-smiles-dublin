@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
 @import 'tailwindcss';
 
+main .location-section { padding-bottom: 48px; }
+@media (max-width: 760px) { main .location-section { padding-bottom: 32px; } }
+
 :root { font-family: 'DM Sans', sans-serif; color: #183040; background: #f7f7f4; font-synthesis: none; text-rendering: optimizeLegibility; --navy: #102a3a; --ink: #183040; --muted: #68767a; --ivory: #f7f7f4; --warm: #ece8df; --gold: #c5a26a; --line: #dce0dd; --serif: 'Instrument Serif', Georgia, serif; }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
