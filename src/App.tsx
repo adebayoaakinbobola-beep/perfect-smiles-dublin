@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import {
   ArrowRight,
   CalendarDays,
@@ -90,28 +91,40 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [openFaq, setOpenFaq] = useState(0)
   const [submitted, setSubmitted] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 760px)').matches)
   const mobileNavRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     if (menuOpen) mobileNavRef.current?.scrollTo(0, 0)
   }, [menuOpen])
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 760px)')
+    const updateIsMobile = () => setIsMobile(mediaQuery.matches)
+    mediaQuery.addEventListener('change', updateIsMobile)
+    return () => mediaQuery.removeEventListener('change', updateIsMobile)
+  }, [])
+
   const closeMenu = () => setMenuOpen(false)
+
+  const mobileNav = (
+    <nav ref={mobileNavRef} className={`main-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Main navigation">
+      <a href="#home" onClick={closeMenu}>Home</a>
+      <a href="#treatments" onClick={closeMenu}>Treatments</a>
+      <a href="#about" onClick={closeMenu}>About</a>
+      <a href="#why-us" onClick={closeMenu}>Why choose us</a>
+      <a href="#faq" onClick={closeMenu}>FAQ</a>
+      <a href="#contact" onClick={closeMenu}>Contact</a>
+      <button className="button button-dark nav-cta" onClick={() => { closeMenu(); scrollToBooking() }}>Book an Appointment <ArrowRight size={16} /></button>
+    </nav>
+  )
 
   return (
     <div className="app-shell">
       <header className="site-header">
         <div className="container nav-wrap">
           <Logo />
-          <nav ref={mobileNavRef} className={`main-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Main navigation">
-            <a href="#home" onClick={closeMenu}>Home</a>
-            <a href="#treatments" onClick={closeMenu}>Treatments</a>
-            <a href="#about" onClick={closeMenu}>About</a>
-            <a href="#why-us" onClick={closeMenu}>Why choose us</a>
-            <a href="#faq" onClick={closeMenu}>FAQ</a>
-            <a href="#contact" onClick={closeMenu}>Contact</a>
-            <button className="button button-dark nav-cta" onClick={() => { closeMenu(); scrollToBooking() }}>Book an Appointment <ArrowRight size={16} /></button>
-          </nav>
+          {!isMobile && mobileNav}
           <div className="nav-actions">
             <a className="header-phone" href={`tel:${phoneNumber}`} aria-label={`Call Perfect Smiles on ${phoneLabel}`}><Phone size={17} /> <span>{phoneLabel}</span></a>
             <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen}>
@@ -120,6 +133,8 @@ function App() {
           </div>
         </div>
       </header>
+
+      {isMobile && menuOpen && createPortal(mobileNav, document.body)}
 
       <main>
         <section className="hero" id="home">
