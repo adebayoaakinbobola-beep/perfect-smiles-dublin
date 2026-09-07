@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   ArrowRight,
   CalendarDays,
@@ -90,6 +90,11 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [openFaq, setOpenFaq] = useState(0)
   const [submitted, setSubmitted] = useState(false)
+  const mobileNavRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (menuOpen) mobileNavRef.current?.scrollTo(0, 0)
+  }, [menuOpen])
 
   const closeMenu = () => setMenuOpen(false)
 
@@ -98,7 +103,7 @@ function App() {
       <header className="site-header">
         <div className="container nav-wrap">
           <Logo />
-          <nav className={`main-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Main navigation">
+          <nav ref={mobileNavRef} className={`main-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Main navigation">
             <a href="#home" onClick={closeMenu}>Home</a>
             <a href="#treatments" onClick={closeMenu}>Treatments</a>
             <a href="#about" onClick={closeMenu}>About</a>
