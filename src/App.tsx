@@ -92,7 +92,7 @@ function App() {
   const [openFaq, setOpenFaq] = useState(0)
   const [submitted, setSubmitted] = useState(false)
   const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 760px)').matches)
-  const mobileNavRef = useRef<HTMLElement>(null)
+  const mobileNavRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (menuOpen) mobileNavRef.current?.scrollTo(0, 0)
@@ -108,14 +108,16 @@ function App() {
   const closeMenu = () => setMenuOpen(false)
 
   const mobileNav = (
-    <nav ref={mobileNavRef} className={`main-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Main navigation">
-      <a href="#home" onClick={closeMenu}>Home</a>
-      <a href="#treatments" onClick={closeMenu}>Treatments</a>
-      <a href="#about" onClick={closeMenu}>About</a>
-      <a href="#why-us" onClick={closeMenu}>Why choose us</a>
-      <a href="#faq" onClick={closeMenu}>FAQ</a>
-      <a href="#contact" onClick={closeMenu}>Contact</a>
-      <button className="button button-dark nav-cta" onClick={() => { closeMenu(); scrollToBooking() }}>Book an Appointment <ArrowRight size={16} /></button>
+    <nav className={`main-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Main navigation">
+      <div ref={mobileNavRef} className="main-nav-scroll">
+        <a href="#home" onClick={closeMenu}>Home</a>
+        <a href="#treatments" onClick={closeMenu}>Treatments</a>
+        <a href="#about" onClick={closeMenu}>About</a>
+        <a href="#why-us" onClick={closeMenu}>Why choose us</a>
+        <a href="#faq" onClick={closeMenu}>FAQ</a>
+        <a href="#contact" onClick={closeMenu}>Contact</a>
+        <button className="button button-dark nav-cta" onClick={() => { closeMenu(); scrollToBooking() }}>Book an Appointment <ArrowRight size={16} /></button>
+      </div>
     </nav>
   )
 
